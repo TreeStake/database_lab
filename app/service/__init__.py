@@ -1,4 +1,4 @@
-from .adress_service import AddressService
+from .address_service import AddressService
 from .award_service import AwardService
 from .child_service import ChildService
 from .dismissal_service import DismissalService
@@ -10,7 +10,7 @@ from .kindergarden_service import KindergardenService
 from .salary_service import SalaryService
 from .toy_service import ToyService
 
-adress_service = AddressService()
+address_service = AddressService()
 award_service = AwardService()
 child_service = ChildService()
 dismissal_service = DismissalService()

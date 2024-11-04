@@ -1,4 +1,4 @@
-from .adress_dao import AddressDAO
+from .address_dao import AddressDAO
 from .award_dao import AwardDAO
 from .child_dao import ChildDAO
 from .dismissal_dao import DismissalDAO
@@ -15,7 +15,7 @@ award_dao = AwardDAO()
 child_dao = ChildDAO()
 dismissal_dao = DismissalDAO()
 educator_dao = EducatorDAO()
-educator_has_awards_dao = EducatorDAO()
+educator_has_awards_dao = EducatorHasAwardsDAO()
 event_dao = EventDAO()
 group_dao = GroupDAO()
 kindergarden_dao = KindergartenDAO()

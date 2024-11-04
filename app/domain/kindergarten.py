@@ -9,15 +9,21 @@ class Kindergarten(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     number = db.Column(db.String(45), nullable=False)
     adress_id = db.Column(db.Integer, db.ForeignKey('address.id'), nullable=False)
+    groups = db.relationship('Group', backref='kindergarten')
+    educators = db.relationship('Educator', backref='kindergarten')
 
     def __repr__(self):
         return f"Kindergarten(id={self.id}, number='{self.number}', adress_id={self.adress_id})"
 
     def put_into_dto(self) -> Dict[str, Any]:
+        groups = [group.put_into_dto() for group in self.groups]
+        educators = [educator.put_into_dto() for educator in self.educators]
         return {
             'id': self.id,
             'number': self.number,
             'adress_id': self.adress_id,
+            'groups': groups if groups else None,
+            'educators': educators if educators else None
         }
 
     @staticmethod

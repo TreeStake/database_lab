@@ -1,6 +1,6 @@
 from .general_service import GeneralService
-from ..dao import adress_dao
+from ..dao import address_dao
 
 
 class AddressService(GeneralService):
-    _dao = adress_dao
+    _dao = address_dao

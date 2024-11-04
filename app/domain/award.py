@@ -9,6 +9,7 @@ class Award(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(45), nullable=False)
     money = db.Column(db.Integer, nullable=False)
+    award_educators = db.relationship('Educator', secondary='educator_has_awards', back_populates='educator_awards')
 
     def __repr__(self):
         return f"Award(id={self.id}, name='{self.name}', money={self.money})"

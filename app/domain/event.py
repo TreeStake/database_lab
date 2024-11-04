@@ -10,10 +10,9 @@ class Event(db.Model):
     name = db.Column(db.String(45), nullable=False)
     date = db.Column(db.Date, nullable=False)
     educators_id = db.Column(db.Integer, db.ForeignKey('educator.id'), nullable=False)
-    educators_kindergarten_id = db.Column(db.Integer, db.ForeignKey('educator.kindergarten_id'), nullable=False)
 
     def __repr__(self):
-        return f"Event(id={self.id}, name='{self.name}', date={self.date}, educators_id={self.educators_id}, educators_kindergarten_id={self.educators_kindergarten_id})"
+        return f"Event(id={self.id}, name='{self.name}', date={self.date}, educators_id={self.educators_id})"
 
     def put_into_dto(self) -> Dict[str, Any]:
         return {
@@ -21,7 +20,6 @@ class Event(db.Model):
             'name': self.name,
             'date': self.date.isoformat(),
             'educators_id': self.educators_id,
-            'educators_kindergarten_id': self.educators_kindergarten_id,
         }
 
     @staticmethod
@@ -30,6 +28,5 @@ class Event(db.Model):
             name=dto_dict.get('name'),
             date=dto_dict.get('date'),
             educators_id=dto_dict.get('educators_id'),
-            educators_kindergarten_id=dto_dict.get('educators_kindergarten_id')
         )
         return event

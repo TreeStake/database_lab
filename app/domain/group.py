@@ -11,17 +11,23 @@ class Group(db.Model):
     amount = db.Column(db.String(45), nullable=False)
     educators_id = db.Column(db.Integer, db.ForeignKey('educator.id'), nullable=False)
     kindergarten_id = db.Column(db.Integer, db.ForeignKey('kindergarten.id'), nullable=False)
+    children = db.relationship('Child', backref='group')
+    toys = db.relationship('Toy', backref='group')
 
     def __repr__(self):
         return f"Group(id={self.id}, name='{self.name}', amount='{self.amount}', educators_id={self.educators_id}, kindergarten_id={self.kindergarten_id})"
 
     def put_into_dto(self) -> Dict[str, Any]:
+        children = [child.put_into_dto() for child in self.children]
+        toys = [toy.put_into_dto() for toy in self.toys]
         return {
             'id': self.id,
             'name': self.name,
             'amount': self.amount,
             'educators_id': self.educators_id,
             'kindergarten_id': self.kindergarten_id,
+            'children': children if children else None,
+            'toys': toys if toys else None
         }
 
     @staticmethod

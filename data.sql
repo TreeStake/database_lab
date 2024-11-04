@@ -102,18 +102,18 @@ VALUES
 ('Robot', '5', 9, 9, 9),
 ('Lego', '25', 10, 10, 10);
 
-INSERT INTO `event` (`name`, `date`, `educators_id`, `educators_kindergarten_id`)
+INSERT INTO `event` (`name`, `date`, `educators_id`)
 VALUES
-('Christmas Party', '2023-12-25', 1, 1),
-('Graduation', '2023-06-15', 2, 2),
-('Sports Day', '2023-08-20', 3, 3),
-('Parents Day', '2023-05-12', 4, 4),
-('Talent Show', '2023-10-01', 5, 5),
-('Spring Picnic', '2023-04-15', 6, 6),
-('Science Fair', '2023-09-23', 7, 7),
-('Book Week', '2023-11-10', 8, 8),
-('Art Exhibition', '2023-07-05', 9, 9),
-('Music Day', '2023-03-22', 10, 10);
+('Christmas Party', '2023-12-25', 1),
+('Graduation', '2023-06-15', 2),
+('Sports Day', '2023-08-20', 3),
+('Parents Day', '2023-05-12', 4),
+('Talent Show', '2023-10-01', 5),
+('Spring Picnic', '2023-04-15', 6),
+('Science Fair', '2023-09-23', 7),
+('Book Week', '2023-11-10', 8),
+('Art Exhibition', '2023-07-05', 9),
+('Music Day', '2023-03-22', 10);
 
 INSERT INTO `award` (`name`, `money`)
 VALUES
@@ -128,15 +128,15 @@ VALUES
 ('Mentorship Award', 1900),
 ('Dedication Award', 2100);
 
-INSERT INTO `educator_has_awards` (`educators_id`, `educators_kindergarten_id`, `awards_id`)
+INSERT INTO `educator_has_awards` (`educators_id`, `awards_id`)
 VALUES
-(1, 1, 1),
-(2, 2, 2),
-(3, 3, 3),
-(4, 4, 4),
-(5, 5, 5),
-(6, 6, 6),
-(7, 7, 7),
-(8, 8, 8),
-(9, 9, 9),
-(10, 10, 10);
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 4),
+(5, 5),
+(6, 6),
+(7, 7),
+(8, 8),
+(9, 9),
+(10, 10);

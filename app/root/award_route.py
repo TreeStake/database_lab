@@ -20,8 +20,8 @@ def create_award() -> Response:
 
 
 @award_bp.route('/<int:award_id>', methods=['GET'])
-def get_award(goal_id: int) -> Response:
-    return make_response(jsonify(award_controller.find_by_id(goal_id)), HTTPStatus.OK)
+def get_award(award_id: int) -> Response:
+    return make_response(jsonify(award_controller.find_by_id(award_id)), HTTPStatus.OK)
 
 
 @award_bp.route('/<int:award_id>', methods=['PUT'])

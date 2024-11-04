@@ -1,6 +1,5 @@
 import mysql.connector
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from app.config import Config
 from app.root import register_routes
 import os
@@ -9,22 +8,14 @@ from app.database import db
 
 print(sys.path)
 
-
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
-    db.init_app(app)  # Инициализируем сразу после создания приложения
-
-    # Регистрируем маршруты
+    db.init_app(app)
     register_routes(app)
-
-    # Создаем базу данных и таблицы в контексте приложения
-    with app.app_context():
-        create_database()  # Создаем базу данных, если её нет
-        create_tables(app)  # Создаем таблицы в базе данных
-        print("Таблицы данных созданы или уже существуют.")
-        populate_data()  # Заполняем таблицы, если есть SQL файл
-
+    create_database()
+    create_tables(app)
+    populate_data()
     return app
 
 
@@ -41,7 +32,7 @@ def create_database():
 
 
 def create_tables(app):
-    with app.app_context():  # Убедитесь, что в контексте приложения
+    with app.app_context():
         db.create_all()
 
 def populate_data():
