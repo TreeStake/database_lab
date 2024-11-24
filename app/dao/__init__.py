@@ -9,6 +9,7 @@ from .group_dao import GroupDAO
 from .kindergarden_dao import KindergartenDAO
 from .salary_dao import SalaryDAO
 from .toy_dao import ToyDAO
+from .transfer_child_dao import TransferChildDAO
 
 address_dao = AddressDAO()
 award_dao = AwardDAO()
@@ -21,3 +22,4 @@ group_dao = GroupDAO()
 kindergarden_dao = KindergartenDAO()
 salary_dao = SalaryDAO()
 toy_dao = ToyDAO()
+transfer_child_dao = TransferChildDAO()

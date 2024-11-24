@@ -9,6 +9,7 @@ from .group_controller import GroupController
 from .kindergarten_controller import KindergartenController
 from .salary_controller import SalaryController
 from .toy_controller import ToyController
+from .transfer_child_controller import TransferChildController
 
 address_controller = AddressController()
 award_controller = AwardController()
@@ -21,3 +22,4 @@ group_controller = GroupController()
 kindergarten_controller = KindergartenController()
 salary_controller = SalaryController()
 toy_controller = ToyController()
+transfer_child_controller = TransferChildController()

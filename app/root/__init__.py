@@ -16,6 +16,7 @@ def register_routes(app: Flask) -> None:
     from .kindergarten_route import kindergarten_bp
     from .salary_route import salary_bp
     from .toy_route import toy_bp
+    from .transfer_child_route import transfer_child_bp
 
     app.register_blueprint(address_bp)
     app.register_blueprint(award_bp)
@@ -28,3 +29,4 @@ def register_routes(app: Flask) -> None:
     app.register_blueprint(kindergarten_bp)
     app.register_blueprint(salary_bp)
     app.register_blueprint(toy_bp)
+    app.register_blueprint(transfer_child_bp)

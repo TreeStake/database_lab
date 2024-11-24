@@ -30,3 +30,9 @@ class Event(db.Model):
             educators_id=dto_dict.get('educators_id'),
         )
         return event
+
+def insert_event(name: str, date: str, educators_id: int) -> Event:
+    new_event = Event(name=name, date=date, educators_id=educators_id)
+    db.session.add(new_event)
+    db.session.commit()
+    return new_event

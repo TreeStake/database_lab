@@ -9,6 +9,7 @@ from .group_service import GroupService
 from .kindergarden_service import KindergardenService
 from .salary_service import SalaryService
 from .toy_service import ToyService
+from .transfer_child_service import TransferChildService
 
 address_service = AddressService()
 award_service = AwardService()
@@ -21,3 +22,4 @@ group_service = GroupService()
 kindergarden_service = KindergardenService()
 salary_service = SalaryService()
 toy_service = ToyService()
+transfer_child_service = TransferChildService()

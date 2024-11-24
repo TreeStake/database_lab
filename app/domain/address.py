@@ -27,3 +27,21 @@ class Address(db.Model):
             building_number=dto_dict.get('building_number')
         )
         return address
+
+
+def insert_addresses(n):
+    addresses = [
+        Address(
+            street=f"No-name{i}",
+            building_number=f'{i}'
+        )
+        for i in range(n)
+    ]
+
+    try:
+        db.session.bulk_save_objects(addresses)
+        db.session.commit()
+        return addresses
+    except Exception:
+        db.session.rollback()
+        return -1

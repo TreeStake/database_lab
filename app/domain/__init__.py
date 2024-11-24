@@ -9,3 +9,4 @@ from .group import Group
 from .kindergarten import Kindergarten
 from .salary import Salary
 from .toy import Toy
+from .transfer_child import TransferChild

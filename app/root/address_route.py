@@ -1,7 +1,7 @@
 from http import HTTPStatus
 from flask import Blueprint, jsonify, Response, request, make_response
 from ..controller import address_controller
-from ..domain.address import Address
+from ..domain.address import Address, insert_addresses
 
 address_bp = Blueprint('address', __name__, url_prefix='/address')
 
@@ -18,6 +18,14 @@ def create_address() -> Response:
     address_controller.create(address)
     return make_response(jsonify(address.put_into_dto()), HTTPStatus.CREATED)
 
+@address_bp.route('/auto_insert', methods=['POST'])
+def auto_addresses_create() -> Response | tuple[Response, int]:
+    result = insert_addresses(10)
+    if result != -1:
+        res = [address.put_into_dto() for address in result]
+        return jsonify({"new_addresses": res})
+    else:
+        return jsonify({"error"}), 400
 
 @address_bp.route('/<int:address_id>', methods=['GET'])
 def get_address(address_id: int) -> Response:

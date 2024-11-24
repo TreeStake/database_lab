@@ -18,6 +18,17 @@ def create_educator_award() -> Response:
     educator_has_awards_controller.create(educator_has_award)
     return make_response(jsonify(educator_has_award.put_into_dto()), HTTPStatus.CREATED)
 
+@educator_has_awards_bp.route('/new_link', methods=['POST'])
+def add_award_to_educator():
+    data = request.get_json()
+    educator_name = data['educator']
+    award_name = data['award']
+
+    try:
+        new_link = EducatorHasAwards.add_award_to_educator(educator_name, award_name)
+        return make_response(jsonify(new_link.put_into_dto()), HTTPStatus.CREATED)
+    except ValueError as e:
+        return make_response(str(e), HTTPStatus.BAD_REQUEST)
 
 @educator_has_awards_bp.route('/<int:educator_has_awards_id>', methods=['GET'])
 def get_educator_award(educator_award_id: int) -> Response:

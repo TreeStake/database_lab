@@ -1,7 +1,7 @@
 from http import HTTPStatus
 from flask import Blueprint, jsonify, Response, request, make_response
 from ..controller import event_controller
-from ..domain.event import Event
+from ..domain.event import Event, insert_event
 
 event_bp = Blueprint('event', __name__, url_prefix='/event')
 
@@ -18,6 +18,15 @@ def create_event() -> Response:
     event_controller.create(event)
     return make_response(jsonify(event.put_into_dto()), HTTPStatus.CREATED)
 
+@event_bp.route('/parametrized', methods=['POST'])
+def insert_parametrized() -> Response:
+    content = request.get_json()
+    new_event = insert_event(
+        name=content['name'],
+        date=content['date'],
+        educators_id=content['educators_id']
+    )
+    return make_response(jsonify(new_event.put_into_dto()), HTTPStatus.CREATED)
 
 @event_bp.route('/<int:event_id>', methods=['GET'])
 def get_event(event_id: int) -> Response:

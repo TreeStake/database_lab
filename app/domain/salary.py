@@ -27,3 +27,19 @@ class Salary(db.Model):
             experience=dto_dict.get('experience')
         )
         return salary
+
+def get_through_salary(salary_type):
+    if salary_type == 'MAX':
+        result = db.session.query(db.func.max(Salary.amount)).scalar()
+        return result
+    elif salary_type == 'MIN':
+        result = db.session.query(db.func.min(Salary.amount)).scalar()
+        return result
+    elif salary_type == 'SUM':
+        result = db.session.query(db.func.sum(Salary.amount)).scalar()
+        return result
+    elif salary_type == 'AVG':
+        result = db.session.query(db.func.avg(Salary.amount)).scalar()
+        return result
+    else:
+        return -1
