@@ -5,8 +5,16 @@ from app.root import register_routes
 import os
 import sys
 from app.database import db
+from dotenv import load_dotenv
 
 print(sys.path)
+
+load_dotenv()
+
+DB_USER = os.getenv("DB_USER")
+DB_PASS = os.getenv("DB_PASS")
+DB_HOST = os.getenv("DB_HOST")
+DB_NAME = os.getenv("DB_NAME")
 
 def create_app():
     app = Flask(__name__)
@@ -21,9 +29,9 @@ def create_app():
 
 def create_database():
     connection = mysql.connector.connect(
-        host='127.0.0.1',
-        user='root',
-        password='qwer1234',
+        host=f'{DB_HOST}',
+        user=f'{DB_USER}',
+        password=f'{DB_PASS}',
     )
     cursor = connection.cursor()
     cursor.execute("CREATE DATABASE IF NOT EXISTS kinderdb")
@@ -33,16 +41,17 @@ def create_database():
 
 def create_tables(app):
     with app.app_context():
+        db.drop_all()
         db.create_all()
 
 def populate_data():
     sql_file_path = os.path.abspath('data.sql')
     if os.path.exists('data.sql'):
         connection = mysql.connector.connect(
-            host='127.0.0.1',
-            user='root',
-            password='qwer1234',
-            database='kinderdb'
+            host=f'{DB_HOST}',
+            user=f'{DB_USER}',
+            password=f'{DB_PASS}',
+            database=f'{DB_NAME}'
         )
         cursor = connection.cursor()
         with open(sql_file_path, 'r') as sql_file:
