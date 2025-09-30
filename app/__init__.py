@@ -6,6 +6,7 @@ import os
 import sys
 from app.database import db
 from dotenv import load_dotenv
+from flasgger import Swagger
 
 print(sys.path)
 
@@ -21,6 +22,9 @@ def create_app():
     app.config.from_object(Config)
     db.init_app(app)
     register_routes(app)
+
+    swagger = Swagger(app)
+
     create_database()
     create_tables(app)
     populate_data()
