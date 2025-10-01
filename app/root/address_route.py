@@ -15,9 +15,9 @@ address_bp = Blueprint('address', __name__, url_prefix='/address')
         200: {
             'description': 'List of all addresses',
             'content': {
-                'application/json': [{
-                    'example': [{"id": 1, "street": "Khreshchatyk"}]
-                }]
+                'application/json': {
+                    'example': [{"id": 1, "street": "Khreshchatyk", "building_number": "12"}]
+                }
             }
         }
     }
@@ -33,13 +33,27 @@ def get_all_addresses() -> Response:
     'requestBody': {
         'required': True,
         'content': {
-            'application/json': [{
-                'example': {"street": "Khreshchatyk", "city": "Kyiv"}
-            }]
+            'application/json': {
+                'schema': {
+                    'type': 'object',
+                    'properties': {
+                        'street': {'type': 'string', 'description': 'Street name'},
+                        'building_number': {'type': 'string', 'description': 'Building number'}
+                    },
+                    'required': ['street', 'building_number']
+                }
+            }
         }
     },
     'responses': {
-        201: {'description': 'Address created'}
+        201: {
+            'description': 'Address created',
+            'content': {
+                'application/json': {
+                    'example': {"id": 1, "street": "Chuprynky", "building_number": "12"}
+                }
+            }
+        }
     }
 })
 def create_address() -> Response:
@@ -57,7 +71,7 @@ def create_address() -> Response:
         {
             'name': 'address_id',
             'in': 'path',
-            'type': 'integer',
+            'schema': {'type': 'integer'},
             'required': True,
             'description': 'ID of the address'
         }
@@ -66,9 +80,9 @@ def create_address() -> Response:
         200: {
             'description': 'Address data',
             'content': {
-                'application/json': [{
-                    'example': {"id": 1, "street": "Khreshchatyk", "city": "Kyiv"}
-                }]
+                'application/json': {
+                    'example': {"id": 1, "street": "Khreshchatyk", "building_number": "12"}
+                }
             }
         }
     }
@@ -82,17 +96,39 @@ def get_address(address_id: int) -> Response:
     'tags': ['Address'],
     'summary': 'Update entire address by ID',
     'parameters': [
-        {'name': 'address_id', 'in': 'path', 'type': 'integer', 'required': True}
+        {
+            'name': 'address_id',
+            'in': 'path',
+            'schema': {'type': 'integer'},
+            'required': True,
+            'description': 'ID of the address to update'
+        }
     ],
     'requestBody': {
         'required': True,
         'content': {
-            'application/json': [{
-                'example': {"street": "New Street", "city": "Lviv"}
-            }]
+            'application/json': {
+                'schema': {
+                    'type': 'object',
+                    'properties': {
+                        'street': {'type': 'string', 'description': 'Street name'},
+                        'building_number': {'type': 'string', 'description': 'Building number'}
+                    },
+                    'required': ['street', 'building_number']
+                }
+            }
         }
     },
-    'responses': {200: {'description': 'Address updated'}}
+    'responses': {
+        200: {
+            'description': 'Address updated',
+            'content': {
+                'application/json': {
+                    'example': {"id": 1, "street": "New Street", "building_number": "15"}
+                }
+            }
+        }
+    }
 })
 def update_address(address_id: int) -> Response:
     content = request.get_json()
@@ -104,19 +140,40 @@ def update_address(address_id: int) -> Response:
 @address_bp.route('/<int:address_id>', methods=['PATCH'])
 @swag_from({
     'tags': ['Address'],
-    'summary': 'Patch address by ID',
+    'summary': 'Partially update address by ID',
     'parameters': [
-        {'name': 'address_id', 'in': 'path', 'type': 'integer', 'required': True}
+        {
+            'name': 'address_id',
+            'in': 'path',
+            'schema': {'type': 'integer'},
+            'required': True,
+            'description': 'ID of the address to patch'
+        }
     ],
     'requestBody': {
         'required': True,
         'content': {
-            'application/json': [{
-                'example': {"street": "Partial Update Street"}
-            }]
+            'application/json': {
+                'schema': {
+                    'type': 'object',
+                    'properties': {
+                        'street': {'type': 'string', 'description': 'Street name'},
+                        'building_number': {'type': 'string', 'description': 'Building number'}
+                    }
+                }
+            }
         }
     },
-    'responses': {200: {'description': 'Address partially updated'}}
+    'responses': {
+        200: {
+            'description': 'Address partially updated',
+            'content': {
+                'application/json': {
+                    'example': {"id": 1, "street": "Partial Update Street", "building_number": "12"}
+                }
+            }
+        }
+    }
 })
 def patch_address(address_id: int) -> Response:
     content = request.get_json()
