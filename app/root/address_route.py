@@ -15,9 +15,9 @@ address_bp = Blueprint('address', __name__, url_prefix='/address')
         200: {
             'description': 'List of all addresses',
             'content': {
-                'application/json': {
+                'application/json': [{
                     'example': [{"id": 1, "street": "Khreshchatyk"}]
-                }
+                }]
             }
         }
     }
@@ -33,9 +33,9 @@ def get_all_addresses() -> Response:
     'requestBody': {
         'required': True,
         'content': {
-            'application/json': {
+            'application/json': [{
                 'example': {"street": "Khreshchatyk", "city": "Kyiv"}
-            }
+            }]
         }
     },
     'responses': {
@@ -66,9 +66,9 @@ def create_address() -> Response:
         200: {
             'description': 'Address data',
             'content': {
-                'application/json': {
+                'application/json': [{
                     'example': {"id": 1, "street": "Khreshchatyk", "city": "Kyiv"}
-                }
+                }]
             }
         }
     }
@@ -87,9 +87,9 @@ def get_address(address_id: int) -> Response:
     'requestBody': {
         'required': True,
         'content': {
-            'application/json': {
+            'application/json': [{
                 'example': {"street": "New Street", "city": "Lviv"}
-            }
+            }]
         }
     },
     'responses': {200: {'description': 'Address updated'}}
@@ -111,9 +111,9 @@ def update_address(address_id: int) -> Response:
     'requestBody': {
         'required': True,
         'content': {
-            'application/json': {
+            'application/json': [{
                 'example': {"street": "Partial Update Street"}
-            }
+            }]
         }
     },
     'responses': {200: {'description': 'Address partially updated'}}

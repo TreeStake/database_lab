@@ -1,16 +1,10 @@
 from http import HTTPStatus
 from flask import Blueprint, jsonify, Response, request, make_response
-from flasgger import swag_from, Schema, fields
+from flasgger import swag_from
 from ..controller import child_controller
 from ..domain.child import Child
 
 child_bp = Blueprint('child', __name__, url_prefix='/child')
-
-class ChildSchema(Schema):
-    age = fields.Int(required=True, description="Age of the child")
-    group_id = fields.Int(required=True, description="ID of the group")
-    kindergarten_id = fields.Int(required=True, description="ID of the kindergarten")
-    name = fields.Str(required=True, description="Name of the child")
 
 
 @child_bp.route('', methods=['GET'])
@@ -21,11 +15,11 @@ class ChildSchema(Schema):
         200: {
             'description': 'List of all children',
             'content': {
-                'application/json': {
+                'application/json': [{
                     'example': [
                         {"id": 1, "age": 5, "group_id": 1, "kindergarten_id": 1, "name": "Lev"}
                     ]
-                }
+                }]
             }
         }
     }
@@ -41,19 +35,18 @@ def get_all_children() -> Response:
     'requestBody': {
         'required': True,
         'content': {
-            'application/json': {
-                'schema': ChildSchema,
+            'application/json': [{
                 'example': {"age": 5, "group_id": 1, "kindergarten_id": 1, "name": "Lev"}
-            }
+            }]
         }
     },
     'responses': {
         201: {
             'description': 'Child created',
             'content': {
-                'application/json': {
+                'application/json': [{
                     'example': {"id": 1, "age": 5, "group_id": 1, "kindergarten_id": 1, "name": "Lev"}
-                }
+                }]
             }
         }
     }
@@ -76,9 +69,9 @@ def create_child() -> Response:
         200: {
             'description': 'Child details',
             'content': {
-                'application/json': {
+                'application/json': [{
                     'example': {"id": 1, "age": 5, "group_id": 1, "kindergarten_id": 1, "name": "Lev"}
-                }
+                }]
             }
         }
     }
@@ -97,19 +90,18 @@ def get_child(child_id: int) -> Response:
     'requestBody': {
         'required': True,
         'content': {
-            'application/json': {
-                'schema': ChildSchema,
+            'application/json': [{
                 'example': {"age": 6, "group_id": 1, "kindergarten_id": 1, "name": "Lev Updated"}
-            }
+            }]
         }
     },
     'responses': {
         200: {
             'description': 'Child updated',
             'content': {
-                'application/json': {
+                'application/json': [{
                     'example': {"id": 1, "age": 6, "group_id": 1, "kindergarten_id": 1, "name": "Lev Updated"}
-                }
+                }]
             }
         }
     }
@@ -131,10 +123,9 @@ def update_child(child_id: int) -> Response:
     'requestBody': {
         'required': True,
         'content': {
-            'application/json': {
-                'schema': ChildSchema,
+            'application/json': [{
                 'example': {"age": 7}
-            }
+            }]
         }
     },
     'responses': {
@@ -165,9 +156,9 @@ def patch_child(child_id: int) -> Response:
         200: {
             'description': 'Child deleted',
             'content': {
-                'application/json': {
+                'application/json': [{
                     'example': {"message": "child deleted"}
-                }
+                }]
             }
         }
     }
