@@ -2,10 +2,13 @@ from http import HTTPStatus
 from flask import Blueprint, jsonify, Response, request, make_response
 from ..controller import award_controller
 from ..domain.award import Award
-from flasgger import swag_from
+from flasgger import swag_from, Schema, fields
 
 award_bp = Blueprint('award', __name__, url_prefix='/award')
 
+class AwardSchema(Schema):
+    money = fields.Int(required=True, description="Amount of money for the award")
+    name = fields.Str(required=True, description="Name of the award")
 
 @award_bp.route('', methods=['GET'])
 @swag_from({
@@ -36,7 +39,8 @@ def get_all_awards() -> Response:
         'required': True,
         'content': {
             'application/json': {
-                'example': {"money": 1000, "name": "Best Teacher"}
+                'schema': AwardSchema,
+                'example': {"money": 10000, "name": "Best Teacher"}
             }
         }
     },
@@ -45,7 +49,7 @@ def get_all_awards() -> Response:
             'description': 'Award created',
             'content': {
                 'application/json': {
-                    'example': {"id": 1, "money": 1000, "name": "Best Teacher"}
+                    'example': {"id": 1, "money": 10000, "name": "Best Teacher"}
                 }
             }
         }
@@ -91,6 +95,7 @@ def get_award(award_id: int) -> Response:
         'required': True,
         'content': {
             'application/json': {
+                'schema': AwardSchema,
                 'example': {"money": 1500, "name": "Top Teacher"}
             }
         }
@@ -124,6 +129,7 @@ def update_award(award_id: int) -> Response:
         'required': True,
         'content': {
             'application/json': {
+                'schema': AwardSchema,
                 'example': {"money": 2000}
             }
         }
