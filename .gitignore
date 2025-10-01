@@ -4,6 +4,7 @@ __pycache__/
 *.pyd
 .env
 deploy.sh
+hooks.json
 
 venv/
 env/
