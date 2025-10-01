@@ -1,8 +1,8 @@
 from http import HTTPStatus
 from flask import Blueprint, jsonify, Response, request, make_response
+from flasgger import swag_from, Schema, fields
 from ..controller import award_controller
 from ..domain.award import Award
-from flasgger import swag_from, Schema, fields
 
 award_bp = Blueprint('award', __name__, url_prefix='/award')
 

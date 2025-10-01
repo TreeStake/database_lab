@@ -1,8 +1,8 @@
 from http import HTTPStatus
 from flask import Blueprint, jsonify, Response, request, make_response
+from flasgger import swag_from, Schema, fields
 from ..controller import child_controller
 from ..domain.child import Child
-from flasgger import swag_from, Schema, fields
 
 child_bp = Blueprint('child', __name__, url_prefix='/child')
 
@@ -133,7 +133,7 @@ def update_child(child_id: int) -> Response:
         'content': {
             'application/json': {
                 'schema': ChildSchema,
-                'example': {"age": 7}  # часткове оновлення
+                'example': {"age": 7}
             }
         }
     },
