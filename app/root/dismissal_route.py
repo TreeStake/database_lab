@@ -34,27 +34,29 @@ def get_all_dismissals() -> Response:
     'tags': ['Dismissal'],
     'summary': 'Create a new dismissal',
     'description': 'Creates a new dismissal entry in the database.',
-    'requestBody': {
-        'required': True,
-        'content': {
-            'application/json': {
-                'schema': {
-                    'type': 'object',
-                    'properties': {
-                        'date': {'type': 'string', 'format': 'date', 'example': '2023-05-12'},
-                        'reason': {'type': 'string', 'example': 'Dismissal'}
-                    },
-                    'required': ['date', 'reason']
-                }
+    'parameters': [
+        {
+            'in': 'body',
+            'name': 'body',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'date': {'type': 'string', 'format': 'date', 'example': '2023-05-12'},
+                    'reason': {'type': 'string', 'example': 'Dismissal'}
+                },
+                'required': ['date', 'reason']
             }
         }
-    },
+    ],
     'responses': {
         201: {
             'description': 'Dismissal created successfully',
-            'content': {
+            'examples': {
                 'application/json': {
-                    'example': {"id": 1, "date": "2023-05-12", "reason": "Dismissal"}
+                    "id": 1,
+                    "date": "2023-05-12",
+                    "reason": "Dismissal"
                 }
             }
         }
@@ -94,27 +96,32 @@ def get_dismissal(dismissal_id: int) -> Response:
 @swag_from({
     'tags': ['Dismissal'],
     'summary': 'Update dismissal by ID',
-    'description': 'Updates all fields of a dismissal record by its ID.',
+    'description': 'Replaces all fields of a dismissal record with new data.',
     'parameters': [
-        {'name': 'dismissal_id', 'in': 'path', 'type': 'integer', 'required': True}
-    ],
-    'requestBody': {
-        'required': True,
-        'content': {
-            'application/json': {
-                'schema': {
-                    'type': 'object',
-                    'properties': {
-                        'date': {'type': 'string', 'format': 'date', 'example': '2023-05-12'},
-                        'reason': {'type': 'string', 'example': 'Dismissal'}
-                    },
-                    'required': ['date', 'reason']
-                }
+        {
+            'name': 'dismissal_id',
+            'in': 'path',
+            'schema': {'type': 'integer'},
+            'required': True,
+            'description': 'ID of the dismissal to update'
+        },
+        {
+            'in': 'body',
+            'name': 'body',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'date': {'type': 'string', 'format': 'date', 'example': '2023-05-15'},
+                    'reason': {'type': 'string', 'example': 'Updated reason'}
+                },
+                'required': ['date', 'reason']
             }
         }
-    },
+    ],
     'responses': {
-        200: {'description': 'Dismissal updated successfully'}
+        200: {'description': 'Dismissal updated successfully'},
+        404: {'description': 'Dismissal not found'}
     }
 })
 def update_dismissal(dismissal_id: int) -> Response:
@@ -135,26 +142,25 @@ def update_dismissal(dismissal_id: int) -> Response:
             'in': 'path',
             'schema': {'type': 'integer'},
             'required': True,
-            'description': 'ID of the dismissal to update partially'
-        }
-    ],
-    'requestBody': {
-        'required': True,
-        'content': {
-            'application/json': {
-                'schema': {
-                    'type': 'object',
-                    'properties': {
-                        'date': {'type': 'string', 'format': 'date', 'example': '2023-05-20'},
-                        'reason': {'type': 'string', 'example': 'New Reason'}
-                    }
+            'description': 'ID of the dismissal to partially update'
+        },
+        {
+            'in': 'body',
+            'name': 'body',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'date': {'type': 'string', 'format': 'date', 'example': '2023-05-20'},
+                    'reason': {'type': 'string', 'example': 'New reason text'}
                 }
             }
         }
-    },
+    ],
     'responses': {
         200: {'description': 'Dismissal partially updated successfully'},
-        400: {'description': 'Invalid input data'}
+        400: {'description': 'Invalid input data'},
+        404: {'description': 'Dismissal not found'}
     }
 })
 def patch_dismissal(dismissal_id: int) -> Response:

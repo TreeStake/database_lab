@@ -58,37 +58,35 @@ def get_all_groups() -> Response:
 @swag_from({
     'tags': ['Group'],
     'summary': 'Create a new group',
-    'description': 'Creates a new group entry in the database. Some fields are related to other tables.',
-    'requestBody': {
-        'required': True,
-        'content': {
-            'application/json': {
-                'schema': {
-                    'type': 'object',
-                    'properties': {
-                        "amount": {"type": "string", "example": "20"},
-                        "educators_id": {"type": "integer", "example": 1},
-                        "kindergarten_id": {"type": "integer", "example": 1},
-                        "name": {"type": "string", "example": "Stars"}
-                    },
-                    'required': ['amount', 'educators_id', 'kindergarten_id', 'name']
-                }
+    'description': 'Creates a new group entry in the database.',
+    'parameters': [
+        {
+            'in': 'body',
+            'name': 'body',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    "amount": {"type": "string", "example": "20"},
+                    "educators_id": {"type": "integer", "example": 1},
+                    "kindergarten_id": {"type": "integer", "example": 1},
+                    "name": {"type": "string", "example": "Stars"}
+                },
+                'required': ['amount', 'educators_id', 'kindergarten_id', 'name']
             }
         }
-    },
+    ],
     'responses': {
         201: {
             'description': 'Group created successfully',
-            'content': {
+            'examples': {
                 'application/json': {
-                    'example': {
-                        "amount": "20",
-                        "children": None,
-                        "educators_id": 1,
-                        "kindergarten_id": 1,
-                        "name": "Stars",
-                        "toys": None
-                    }
+                    "amount": "20",
+                    "children": None,
+                    "educators_id": 1,
+                    "kindergarten_id": 1,
+                    "name": "Stars",
+                    "toys": None
                 }
             }
         },
@@ -142,30 +140,35 @@ def get_group(group_id: int) -> Response:
 @swag_from({
     'tags': ['Group'],
     'summary': 'Update group by ID',
-    'description': 'Updates all fields of a group record by its ID.',
+    'description': 'Replaces all fields of a group record with new data.',
     'parameters': [
-        {'name': 'group_id', 'in': 'path', 'schema': {'type': 'integer'}, 'required': True}
-    ],
-    'requestBody': {
-        'required': True,
-        'content': {
-            'application/json': {
-                'schema': {
-                    'type': 'object',
-                    'properties': {
-                        "amount": {"type": "string", "example": "20"},
-                        "educators_id": {"type": "integer", "example": 1},
-                        "kindergarten_id": {"type": "integer", "example": 1},
-                        "name": {"type": "string", "example": "Stars"}
-                    },
-                    'required': ['amount', 'educators_id', 'kindergarten_id', 'name']
-                }
+        {
+            'name': 'group_id',
+            'in': 'path',
+            'schema': {'type': 'integer'},
+            'required': True,
+            'description': 'ID of the group to update'
+        },
+        {
+            'in': 'body',
+            'name': 'body',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    "amount": {"type": "string", "example": "20"},
+                    "educators_id": {"type": "integer", "example": 1},
+                    "kindergarten_id": {"type": "integer", "example": 1},
+                    "name": {"type": "string", "example": "Stars"}
+                },
+                'required': ['amount', 'educators_id', 'kindergarten_id', 'name']
             }
         }
-    },
+    ],
     'responses': {
         200: {'description': 'Group updated successfully'},
-        400: {'description': 'Invalid input data'}
+        400: {'description': 'Invalid input data'},
+        404: {'description': 'Group not found'}
     }
 })
 def update_group(group_id: int) -> Response:
@@ -181,27 +184,32 @@ def update_group(group_id: int) -> Response:
     'summary': 'Partially update group by ID',
     'description': 'Updates one or more fields of a group record by its ID.',
     'parameters': [
-        {'name': 'group_id', 'in': 'path', 'schema': {'type': 'integer'}, 'required': True}
-    ],
-    'requestBody': {
-        'required': True,
-        'content': {
-            'application/json': {
-                'schema': {
-                    'type': 'object',
-                    'properties': {
-                        "amount": {"type": "string", "example": "25"},
-                        "name": {"type": "string", "example": "Stars Updated"},
-                        "kindergarten_id": {"type": "integer", "example": 1},
-                        "educators_id": {"type": "integer", "example": 2}
-                    }
+        {
+            'name': 'group_id',
+            'in': 'path',
+            'schema': {'type': 'integer'},
+            'required': True,
+            'description': 'ID of the group to partially update'
+        },
+        {
+            'in': 'body',
+            'name': 'body',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    "amount": {"type": "string", "example": "25"},
+                    "name": {"type": "string", "example": "Stars Updated"},
+                    "kindergarten_id": {"type": "integer", "example": 1},
+                    "educators_id": {"type": "integer", "example": 2}
                 }
             }
         }
-    },
+    ],
     'responses': {
         200: {'description': 'Group partially updated successfully'},
-        400: {'description': 'Invalid input data'}
+        400: {'description': 'Invalid input data'},
+        404: {'description': 'Group not found'}
     }
 })
 def patch_group(group_id: int) -> Response:

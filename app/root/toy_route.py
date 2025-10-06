@@ -41,37 +41,35 @@ def get_all_toys() -> Response:
     'tags': ['Toy'],
     'summary': 'Create a new toy',
     'description': 'Creates a new toy entry in the database.',
-    'requestBody': {
-        'required': True,
-        'content': {
-            'application/json': {
-                'schema': {
-                    'type': 'object',
-                    'properties': {
-                        "group_educators_id": {"type": "integer", "example": 1},
-                        "group_id": {"type": "integer", "example": 1},
-                        "group_kindergarten_id": {"type": "integer", "example": 1},
-                        "name": {"type": "string", "example": "Ball"},
-                        "number": {"type": "string", "example": "15"}
-                    },
-                    'required': ["group_educators_id", "group_id", "group_kindergarten_id", "name", "number"]
-                }
+    'parameters': [
+        {
+            'in': 'body',
+            'name': 'body',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    "group_educators_id": {"type": "integer", "example": 1},
+                    "group_id": {"type": "integer", "example": 1},
+                    "group_kindergarten_id": {"type": "integer", "example": 1},
+                    "name": {"type": "string", "example": "Ball"},
+                    "number": {"type": "string", "example": "15"}
+                },
+                'required': ["group_educators_id", "group_id", "group_kindergarten_id", "name", "number"]
             }
         }
-    },
+    ],
     'responses': {
         201: {
             'description': 'Toy created successfully',
-            'content': {
+            'examples': {
                 'application/json': {
-                    'example': {
-                        "group_educators_id": 1,
-                        "group_id": 1,
-                        "group_kindergarten_id": 1,
-                        "id": 1,
-                        "name": "Ball",
-                        "number": "15"
-                    }
+                    "id": 1,
+                    "group_educators_id": 1,
+                    "group_id": 1,
+                    "group_kindergarten_id": 1,
+                    "name": "Ball",
+                    "number": "15"
                 }
             }
         },
@@ -122,29 +120,34 @@ def get_toy(toy_id: int) -> Response:
     'summary': 'Update toy by ID',
     'description': 'Updates all fields of a toy record by its ID.',
     'parameters': [
-        {'name': 'toy_id', 'in': 'path', 'schema': {'type': 'integer'}, 'required': True}
-    ],
-    'requestBody': {
-        'required': True,
-        'content': {
-            'application/json': {
-                'schema': {
-                    'type': 'object',
-                    'properties': {
-                        "group_educators_id": {"type": "integer", "example": 2},
-                        "group_id": {"type": "integer", "example": 2},
-                        "group_kindergarten_id": {"type": "integer", "example": 1},
-                        "name": {"type": "string", "example": "Cube"},
-                        "number": {"type": "string", "example": "10"}
-                    },
-                    'required': ["group_educators_id", "group_id", "group_kindergarten_id", "name", "number"]
-                }
+        {
+            'name': 'toy_id',
+            'in': 'path',
+            'schema': {'type': 'integer'},
+            'required': True,
+            'description': 'ID of the toy to update'
+        },
+        {
+            'in': 'body',
+            'name': 'body',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    "group_educators_id": {"type": "integer", "example": 2},
+                    "group_id": {"type": "integer", "example": 2},
+                    "group_kindergarten_id": {"type": "integer", "example": 1},
+                    "name": {"type": "string", "example": "Cube"},
+                    "number": {"type": "string", "example": "10"}
+                },
+                'required': ["group_educators_id", "group_id", "group_kindergarten_id", "name", "number"]
             }
         }
-    },
+    ],
     'responses': {
         200: {'description': 'Toy updated successfully'},
-        400: {'description': 'Invalid input data'}
+        400: {'description': 'Invalid input data'},
+        404: {'description': 'Toy not found'}
     }
 })
 def update_toy(toy_id: int) -> Response:
@@ -160,28 +163,33 @@ def update_toy(toy_id: int) -> Response:
     'summary': 'Partially update toy by ID',
     'description': 'Updates one or more fields of a toy record by its ID.',
     'parameters': [
-        {'name': 'toy_id', 'in': 'path', 'schema': {'type': 'integer'}, 'required': True}
-    ],
-    'requestBody': {
-        'required': True,
-        'content': {
-            'application/json': {
-                'schema': {
-                    'type': 'object',
-                    'properties': {
-                        "group_educators_id": {"type": "integer", "example": 2},
-                        "group_id": {"type": "integer", "example": 2},
-                        "group_kindergarten_id": {"type": "integer", "example": 1},
-                        "name": {"type": "string", "example": "Cube"},
-                        "number": {"type": "string", "example": "10"}
-                    }
+        {
+            'name': 'toy_id',
+            'in': 'path',
+            'schema': {'type': 'integer'},
+            'required': True,
+            'description': 'ID of the toy to partially update'
+        },
+        {
+            'in': 'body',
+            'name': 'body',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    "group_educators_id": {"type": "integer", "example": 2},
+                    "group_id": {"type": "integer", "example": 2},
+                    "group_kindergarten_id": {"type": "integer", "example": 1},
+                    "name": {"type": "string", "example": "Cube"},
+                    "number": {"type": "string", "example": "10"}
                 }
             }
         }
-    },
+    ],
     'responses': {
         200: {'description': 'Toy partially updated successfully'},
-        400: {'description': 'Invalid input data'}
+        400: {'description': 'Invalid input data'},
+        404: {'description': 'Toy not found'}
     }
 })
 def patch_toy(toy_id: int) -> Response:

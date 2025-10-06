@@ -39,33 +39,31 @@ def get_all_events() -> Response:
     'tags': ['Event'],
     'summary': 'Create a new event',
     'description': 'Creates a new event entry in the database.',
-    'requestBody': {
-        'required': True,
-        'content': {
-            'application/json': {
-                'schema': {
-                    'type': 'object',
-                    'properties': {
-                        "date": {"type": "string", "format": "date", "example": "2023-12-25"},
-                        "educators_id": {"type": "integer", "example": 1},
-                        "name": {"type": "string", "example": "Christmas Party"}
-                    },
-                    'required': ['date', 'educators_id', 'name']
-                }
+    'parameters': [
+        {
+            'in': 'body',
+            'name': 'body',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    "date": {"type": "string", "format": "date", "example": "2023-12-25"},
+                    "educators_id": {"type": "integer", "example": 1},
+                    "name": {"type": "string", "example": "Christmas Party"}
+                },
+                'required': ['date', 'educators_id', 'name']
             }
         }
-    },
+    ],
     'responses': {
         201: {
             'description': 'Event created successfully',
-            'content': {
+            'examples': {
                 'application/json': {
-                    'example': {
-                        "date": "2023-12-25",
-                        "educators_id": 1,
-                        "id": 1,
-                        "name": "Christmas Party"
-                    }
+                    "date": "2023-12-25",
+                    "educators_id": 1,
+                    "id": 1,
+                    "name": "Christmas Party"
                 }
             }
         },
@@ -112,29 +110,34 @@ def get_event(event_id: int) -> Response:
 @swag_from({
     'tags': ['Event'],
     'summary': 'Update event by ID',
-    'description': 'Updates all fields of an event record by its ID.',
+    'description': 'Replaces all fields of an event record with new data.',
     'parameters': [
-        {'name': 'event_id', 'in': 'path', 'schema': {'type': 'integer'}, 'required': True}
-    ],
-    'requestBody': {
-        'required': True,
-        'content': {
-            'application/json': {
-                'schema': {
-                    'type': 'object',
-                    'properties': {
-                        "date": {"type": "string", "format": "date", "example": "2023-12-25"},
-                        "educators_id": {"type": "integer", "example": 1},
-                        "name": {"type": "string", "example": "Christmas Party"}
-                    },
-                    'required': ['date', 'educators_id', 'name']
-                }
+        {
+            'name': 'event_id',
+            'in': 'path',
+            'schema': {'type': 'integer'},
+            'required': True,
+            'description': 'ID of the event to update'
+        },
+        {
+            'in': 'body',
+            'name': 'body',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    "date": {"type": "string", "format": "date", "example": "2023-12-25"},
+                    "educators_id": {"type": "integer", "example": 1},
+                    "name": {"type": "string", "example": "Christmas Party"}
+                },
+                'required': ['date', 'educators_id', 'name']
             }
         }
-    },
+    ],
     'responses': {
         200: {'description': 'Event updated successfully'},
-        400: {'description': 'Invalid input data'}
+        400: {'description': 'Invalid input data'},
+        404: {'description': 'Event not found'}
     }
 })
 def update_event(event_id: int) -> Response:
@@ -150,26 +153,31 @@ def update_event(event_id: int) -> Response:
     'summary': 'Partially update event by ID',
     'description': 'Updates one or more fields of an event record by its ID.',
     'parameters': [
-        {'name': 'event_id', 'in': 'path', 'schema': {'type': 'integer'}, 'required': True}
-    ],
-    'requestBody': {
-        'required': True,
-        'content': {
-            'application/json': {
-                'schema': {
-                    'type': 'object',
-                    'properties': {
-                        "date": {"type": "string", "format": "date", "example": "2023-12-31"},
-                        "educators_id": {"type": "integer", "example": 1},
-                        "name": {"type": "string", "example": "New Year Party"}
-                    }
+        {
+            'name': 'event_id',
+            'in': 'path',
+            'schema': {'type': 'integer'},
+            'required': True,
+            'description': 'ID of the event to partially update'
+        },
+        {
+            'in': 'body',
+            'name': 'body',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    "date": {"type": "string", "format": "date", "example": "2023-12-31"},
+                    "educators_id": {"type": "integer", "example": 1},
+                    "name": {"type": "string", "example": "New Year Party"}
                 }
             }
         }
-    },
+    ],
     'responses': {
         200: {'description': 'Event partially updated successfully'},
-        400: {'description': 'Invalid input data'}
+        400: {'description': 'Invalid input data'},
+        404: {'description': 'Event not found'}
     }
 })
 def patch_event(event_id: int) -> Response:

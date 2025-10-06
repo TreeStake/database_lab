@@ -38,31 +38,29 @@ def get_all_salarys() -> Response:
     'tags': ['Salary'],
     'summary': 'Create a new salary record',
     'description': 'Creates a new salary entry in the database.',
-    'requestBody': {
-        'required': True,
-        'content': {
-            'application/json': {
-                'schema': {
-                    'type': 'object',
-                    'properties': {
-                        "amount": {"type": "integer", "example": 30000},
-                        "experience": {"type": "string", "example": "2 years"}
-                    },
-                    'required': ['amount', 'experience']
-                }
+    'parameters': [
+        {
+            'in': 'body',
+            'name': 'body',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    "amount": {"type": "integer", "example": 30000},
+                    "experience": {"type": "string", "example": "2 years"}
+                },
+                'required': ['amount', 'experience']
             }
         }
-    },
+    ],
     'responses': {
         201: {
             'description': 'Salary created successfully',
-            'content': {
+            'examples': {
                 'application/json': {
-                    'example': {
-                        "amount": 30000,
-                        "experience": "2 years",
-                        "id": 1
-                    }
+                    "id": 1,
+                    "amount": 30000,
+                    "experience": "2 years"
                 }
             }
         },
@@ -110,26 +108,31 @@ def get_salary(salary_id: int) -> Response:
     'summary': 'Update salary by ID',
     'description': 'Updates all fields of a salary record by its ID.',
     'parameters': [
-        {'name': 'salary_id', 'in': 'path', 'schema': {'type': 'integer'}, 'required': True}
-    ],
-    'requestBody': {
-        'required': True,
-        'content': {
-            'application/json': {
-                'schema': {
-                    'type': 'object',
-                    'properties': {
-                        "amount": {"type": "integer", "example": 35000},
-                        "experience": {"type": "string", "example": "3 years"}
-                    },
-                    'required': ['amount', 'experience']
-                }
+        {
+            'name': 'salary_id',
+            'in': 'path',
+            'schema': {'type': 'integer'},
+            'required': True,
+            'description': 'ID of the salary to update'
+        },
+        {
+            'in': 'body',
+            'name': 'body',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    "amount": {"type": "integer", "example": 35000},
+                    "experience": {"type": "string", "example": "3 years"}
+                },
+                'required': ['amount', 'experience']
             }
         }
-    },
+    ],
     'responses': {
         200: {'description': 'Salary updated successfully'},
-        400: {'description': 'Invalid input data'}
+        400: {'description': 'Invalid input data'},
+        404: {'description': 'Salary not found'}
     }
 })
 def update_salary(salary_id: int) -> Response:
@@ -145,25 +148,30 @@ def update_salary(salary_id: int) -> Response:
     'summary': 'Partially update salary by ID',
     'description': 'Updates one or more fields of a salary record by its ID.',
     'parameters': [
-        {'name': 'salary_id', 'in': 'path', 'schema': {'type': 'integer'}, 'required': True}
-    ],
-    'requestBody': {
-        'required': True,
-        'content': {
-            'application/json': {
-                'schema': {
-                    'type': 'object',
-                    'properties': {
-                        "amount": {"type": "integer", "example": 35000},
-                        "experience": {"type": "string", "example": "3 years"}
-                    }
+        {
+            'name': 'salary_id',
+            'in': 'path',
+            'schema': {'type': 'integer'},
+            'required': True,
+            'description': 'ID of the salary to partially update'
+        },
+        {
+            'in': 'body',
+            'name': 'body',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    "amount": {"type": "integer", "example": 35000},
+                    "experience": {"type": "string", "example": "3 years"}
                 }
             }
         }
-    },
+    ],
     'responses': {
         200: {'description': 'Salary partially updated successfully'},
-        400: {'description': 'Invalid input data'}
+        400: {'description': 'Invalid input data'},
+        404: {'description': 'Salary not found'}
     }
 })
 def patch_salary(salary_id: int) -> Response:

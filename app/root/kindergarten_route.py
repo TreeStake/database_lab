@@ -38,31 +38,29 @@ def get_all_kindergartens() -> Response:
     'tags': ['Kindergarten'],
     'summary': 'Create a new kindergarten',
     'description': 'Creates a new kindergarten entry in the database.',
-    'requestBody': {
-        'required': True,
-        'content': {
-            'application/json': {
-                'schema': {
-                    'type': 'object',
-                    'properties': {
-                        "adress_id": {"type": "integer", "example": 1},
-                        "number": {"type": "string", "example": "10100"}
-                    },
-                    'required': ['adress_id', 'number']
-                }
+    'parameters': [
+        {
+            'in': 'body',
+            'name': 'body',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    "adress_id": {"type": "integer", "example": 1},
+                    "number": {"type": "string", "example": "10100"}
+                },
+                'required': ['adress_id', 'number']
             }
         }
-    },
+    ],
     'responses': {
         201: {
             'description': 'Kindergarten created successfully',
-            'content': {
+            'examples': {
                 'application/json': {
-                    'example': {
-                        "adress_id": 1,
-                        "number": "10100",
-                        "id": 1
-                    }
+                    "adress_id": 1,
+                    "number": "10100",
+                    "id": 1
                 }
             }
         },
@@ -110,26 +108,31 @@ def get_kindergarten(kindergarten_id: int) -> Response:
     'summary': 'Update kindergarten by ID',
     'description': 'Updates all fields of a kindergarten record by its ID.',
     'parameters': [
-        {'name': 'kindergarten_id', 'in': 'path', 'schema': {'type': 'integer'}, 'required': True}
-    ],
-    'requestBody': {
-        'required': True,
-        'content': {
-            'application/json': {
-                'schema': {
-                    'type': 'object',
-                    'properties': {
-                        "adress_id": {"type": "integer", "example": 1},
-                        "number": {"type": "string", "example": "10100"}
-                    },
-                    'required': ['adress_id', 'number']
-                }
+        {
+            'name': 'kindergarten_id',
+            'in': 'path',
+            'schema': {'type': 'integer'},
+            'required': True,
+            'description': 'ID of the kindergarten to update'
+        },
+        {
+            'in': 'body',
+            'name': 'body',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    "adress_id": {"type": "integer", "example": 1},
+                    "number": {"type": "string", "example": "10100"}
+                },
+                'required': ['adress_id', 'number']
             }
         }
-    },
+    ],
     'responses': {
         200: {'description': 'Kindergarten updated successfully'},
-        400: {'description': 'Invalid input data'}
+        400: {'description': 'Invalid input data'},
+        404: {'description': 'Kindergarten not found'}
     }
 })
 def update_kindergarten(kindergarten_id: int) -> Response:
@@ -145,25 +148,30 @@ def update_kindergarten(kindergarten_id: int) -> Response:
     'summary': 'Partially update kindergarten by ID',
     'description': 'Updates one or more fields of a kindergarten record by its ID.',
     'parameters': [
-        {'name': 'kindergarten_id', 'in': 'path', 'schema': {'type': 'integer'}, 'required': True}
-    ],
-    'requestBody': {
-        'required': True,
-        'content': {
-            'application/json': {
-                'schema': {
-                    'type': 'object',
-                    'properties': {
-                        "adress_id": {"type": "integer", "example": 2},
-                        "number": {"type": "string", "example": "20200"}
-                    }
+        {
+            'name': 'kindergarten_id',
+            'in': 'path',
+            'schema': {'type': 'integer'},
+            'required': True,
+            'description': 'ID of the kindergarten to partially update'
+        },
+        {
+            'in': 'body',
+            'name': 'body',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    "adress_id": {"type": "integer", "example": 2},
+                    "number": {"type": "string", "example": "20200"}
                 }
             }
         }
-    },
+    ],
     'responses': {
         200: {'description': 'Kindergarten partially updated successfully'},
-        400: {'description': 'Invalid input data'}
+        400: {'description': 'Invalid input data'},
+        404: {'description': 'Kindergarten not found'}
     }
 })
 def patch_kindergarten(kindergarten_id: int) -> Response:

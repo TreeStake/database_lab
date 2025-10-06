@@ -48,40 +48,38 @@ def get_all_educators() -> Response:
     'tags': ['Educator'],
     'summary': 'Create a new educator',
     'description': 'Creates a new educator entry in the database.',
-    'requestBody': {
-        'required': True,
-        'content': {
-            'application/json': {
-                'schema': {
-                    'type': 'object',
-                    'properties': {
-                        "dismissal_id": {"type": "integer", "nullable": True, "example": None},
-                        "hire": {"type": "string", "format": "date", "example": "2018-04-10"},
-                        "id": {"type": "integer", "example": 1},
-                        "kindergarten_id": {"type": "integer", "example": 1},
-                        "name": {"type": "string", "example": "Anna"},
-                        "salary_id": {"type": "integer", "example": 1},
-                        "surname": {"type": "string", "example": "Koval"}
-                    },
-                    'required': ['name', 'surname', 'hire', 'kindergarten_id', 'salary_id']
-                }
+    'parameters': [
+        {
+            'in': 'body',
+            'name': 'body',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    "dismissal_id": {"type": "integer", "nullable": True, "example": None},
+                    "hire": {"type": "string", "format": "date", "example": "2018-04-10"},
+                    "id": {"type": "integer", "example": 1},
+                    "kindergarten_id": {"type": "integer", "example": 1},
+                    "name": {"type": "string", "example": "Anna"},
+                    "salary_id": {"type": "integer", "example": 1},
+                    "surname": {"type": "string", "example": "Koval"}
+                },
+                'required': ['name', 'surname', 'hire', 'kindergarten_id', 'salary_id']
             }
         }
-    },
+    ],
     'responses': {
         201: {
             'description': 'Educator created successfully',
-            'content': {
+            'examples': {
                 'application/json': {
-                    'example': {
-                        "dismissal_id": None,
-                        "hire": "2018-04-10",
-                        "id": 1,
-                        "kindergarten_id": 1,
-                        "name": "Anna",
-                        "salary_id": 1,
-                        "surname": "Koval"
-                    }
+                    "dismissal_id": None,
+                    "hire": "2018-04-10",
+                    "id": 1,
+                    "kindergarten_id": 1,
+                    "name": "Anna",
+                    "salary_id": 1,
+                    "surname": "Koval"
                 }
             }
         },
@@ -132,32 +130,37 @@ def get_educator(educator_id: int) -> Response:
 @swag_from({
     'tags': ['Educator'],
     'summary': 'Update educator by ID',
-    'description': 'Updates all fields of an educator record by its ID.',
+    'description': 'Replaces all fields of an educator record with new data.',
     'parameters': [
-        {'name': 'educator_id', 'in': 'path', 'schema': {'type': 'integer'}, 'required': True}
-    ],
-    'requestBody': {
-        'required': True,
-        'content': {
-            'application/json': {
-                'schema': {
-                    'type': 'object',
-                    'properties': {
-                        "dismissal_id": {"type": "integer", "nullable": True, "example": None},
-                        "hire": {"type": "string", "format": "date", "example": "2018-04-10"},
-                        "kindergarten_id": {"type": "integer", "example": 1},
-                        "name": {"type": "string", "example": "Anna"},
-                        "salary_id": {"type": "integer", "example": 1},
-                        "surname": {"type": "string", "example": "Koval"}
-                    },
-                    'required': ['name', 'surname', 'hire', 'kindergarten_id', 'salary_id']
-                }
+        {
+            'name': 'educator_id',
+            'in': 'path',
+            'schema': {'type': 'integer'},
+            'required': True,
+            'description': 'ID of the educator to update'
+        },
+        {
+            'in': 'body',
+            'name': 'body',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    "dismissal_id": {"type": "integer", "nullable": True, "example": None},
+                    "hire": {"type": "string", "format": "date", "example": "2018-04-10"},
+                    "kindergarten_id": {"type": "integer", "example": 1},
+                    "name": {"type": "string", "example": "Anna"},
+                    "salary_id": {"type": "integer", "example": 1},
+                    "surname": {"type": "string", "example": "Koval"}
+                },
+                'required': ['name', 'surname', 'hire', 'kindergarten_id', 'salary_id']
             }
         }
-    },
+    ],
     'responses': {
         200: {'description': 'Educator updated successfully'},
-        400: {'description': 'Invalid input data'}
+        400: {'description': 'Invalid input data'},
+        404: {'description': 'Educator not found'}
     }
 })
 def update_educator(educator_id: int) -> Response:
@@ -173,29 +176,34 @@ def update_educator(educator_id: int) -> Response:
     'summary': 'Partially update educator by ID',
     'description': 'Updates one or more fields of an educator record by its ID.',
     'parameters': [
-        {'name': 'educator_id', 'in': 'path', 'schema': {'type': 'integer'}, 'required': True}
-    ],
-    'requestBody': {
-        'required': True,
-        'content': {
-            'application/json': {
-                'schema': {
-                    'type': 'object',
-                    'properties': {
-                        "dismissal_id": {"type": "integer", "nullable": True, "example": None},
-                        "hire": {"type": "string", "format": "date", "example": "2018-04-10"},
-                        "kindergarten_id": {"type": "integer", "example": 1},
-                        "name": {"type": "string", "example": "Anna"},
-                        "salary_id": {"type": "integer", "example": 1},
-                        "surname": {"type": "string", "example": "Koval"}
-                    }
+        {
+            'name': 'educator_id',
+            'in': 'path',
+            'schema': {'type': 'integer'},
+            'required': True,
+            'description': 'ID of the educator to partially update'
+        },
+        {
+            'in': 'body',
+            'name': 'body',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    "dismissal_id": {"type": "integer", "nullable": True, "example": None},
+                    "hire": {"type": "string", "format": "date", "example": "2018-04-10"},
+                    "kindergarten_id": {"type": "integer", "example": 1},
+                    "name": {"type": "string", "example": "Anna"},
+                    "salary_id": {"type": "integer", "example": 1},
+                    "surname": {"type": "string", "example": "Koval"}
                 }
             }
         }
-    },
+    ],
     'responses': {
         200: {'description': 'Educator partially updated successfully'},
-        400: {'description': 'Invalid input data'}
+        400: {'description': 'Invalid input data'},
+        404: {'description': 'Educator not found'}
     }
 })
 def patch_educator(educator_id: int) -> Response:

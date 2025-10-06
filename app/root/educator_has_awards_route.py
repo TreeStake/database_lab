@@ -34,33 +34,35 @@ def get_all_educator_awards() -> Response:
     'tags': ['Educator-Has-Award'],
     'summary': 'Create a new educator-award relation',
     'description': 'Creates a new relation between an educator and an award.',
-    'requestBody': {
-        'required': True,
-        'content': {
-            'application/json': {
-                'schema': {
-                    'type': 'object',
-                    'properties': {
-                        'awards_id': {'type': 'integer', 'example': 1},
-                        'educators_id': {'type': 'integer', 'example': 1}
-                    },
-                    'required': ['awards_id', 'educators_id']
-                }
+    'parameters': [
+        {
+            'in': 'body',
+            'name': 'body',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'awards_id': {'type': 'integer', 'example': 1},
+                    'educators_id': {'type': 'integer', 'example': 1}
+                },
+                'required': ['awards_id', 'educators_id']
             }
         }
-    },
+    ],
     'responses': {
         201: {
             'description': 'Educator-award relation created successfully',
-            'content': {
+            'examples': {
                 'application/json': {
-                    'example': {"awards_id": 1, "educators_id": 1}
+                    "awards_id": 1,
+                    "educators_id": 1
                 }
             }
         },
         400: {'description': 'Invalid input data'}
     }
 })
+
 def create_educator_award() -> Response:
     content = request.get_json()
     educator_has_award = EducatorHasAwards.create_from_dto(content)

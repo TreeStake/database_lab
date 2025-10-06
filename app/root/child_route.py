@@ -34,29 +34,33 @@ def get_all_children() -> Response:
     'tags': ['Child'],
     'summary': 'Create a new child',
     'description': 'Creates a new child entry in the database.',
-    'requestBody': {
-        'required': True,
-        'content': {
-            'application/json': {
-                'schema': {
-                    'type': 'object',
-                    'properties': {
-                        'name': {'type': 'string', 'example': 'Lev'},
-                        'age': {'type': 'integer', 'example': 5},
-                        'group_id': {'type': 'integer', 'example': 1},
-                        'kindergarten_id': {'type': 'integer', 'example': 1}
-                    },
-                    'required': ['name', 'age', 'group_id', 'kindergarten_id']
-                }
+    'parameters': [
+        {
+            'in': 'body',
+            'name': 'body',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'name': {'type': 'string', 'example': 'Lev'},
+                    'age': {'type': 'integer', 'example': 5},
+                    'group_id': {'type': 'integer', 'example': 1},
+                    'kindergarten_id': {'type': 'integer', 'example': 1}
+                },
+                'required': ['name', 'age', 'group_id', 'kindergarten_id']
             }
         }
-    },
+    ],
     'responses': {
         201: {
             'description': 'Child created successfully',
-            'content': {
+            'examples': {
                 'application/json': {
-                    'example': {"id": 1, "name": "Lev", "age": 5, "group_id": 1, "kindergarten_id": 1}
+                    "id": 1,
+                    "name": "Lev",
+                    "age": 5,
+                    "group_id": 1,
+                    "kindergarten_id": 1
                 }
             }
         }
@@ -111,24 +115,23 @@ def get_child(child_id: int) -> Response:
             'schema': {'type': 'integer'},
             'required': True,
             'description': 'ID of the child to update'
-        }
-    ],
-    'requestBody': {
-        'required': True,
-        'content': {
-            'application/json': {
-                'schema': {
-                    'type': 'object',
-                    'properties': {
-                        'name': {'type': 'string', 'example': 'Lev Updated'},
-                        'age': {'type': 'integer', 'example': 6},
-                        'group_id': {'type': 'integer', 'example': 2},
-                        'kindergarten_id': {'type': 'integer', 'example': 1}
-                    }
-                }
+        },
+        {
+            'in': 'body',
+            'name': 'body',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'name': {'type': 'string', 'example': 'Lev Updated'},
+                    'age': {'type': 'integer', 'example': 6},
+                    'group_id': {'type': 'integer', 'example': 2},
+                    'kindergarten_id': {'type': 'integer', 'example': 1}
+                },
+                'required': ['name', 'age', 'group_id', 'kindergarten_id']
             }
         }
-    },
+    ],
     'responses': {
         200: {'description': 'Child updated successfully'}
     }
@@ -152,23 +155,21 @@ def update_child(child_id: int) -> Response:
             'schema': {'type': 'integer'},
             'required': True,
             'description': 'ID of the child to update partially'
-        }
-    ],
-    'requestBody': {
-        'required': True,
-        'content': {
-            'application/json': {
-                'schema': {
-                    'type': 'object',
-                    'properties': {
-                        'name': {'type': 'string', 'example': 'Partial Update Name'},
-                        'age': {'type': 'integer', 'example': 6},
-                        'group_id': {'type': 'integer', 'example': 2}
-                    }
+        },
+        {
+            'in': 'body',
+            'name': 'body',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'name': {'type': 'string', 'example': 'Partial Update Name'},
+                    'age': {'type': 'integer', 'example': 6},
+                    'group_id': {'type': 'integer', 'example': 2}
                 }
             }
         }
-    },
+    ],
     'responses': {
         200: {'description': 'Child partially updated successfully'},
         400: {'description': 'Invalid input data'}
