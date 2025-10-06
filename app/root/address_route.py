@@ -31,41 +31,30 @@ def get_all_addresses() -> Response:
     'tags': ['Address'],
     'summary': 'Create a new address',
     'description': 'Creates a new address and returns it.',
-    'requestBody': {
-        'required': True,
-        'content': {
-            'application/json': {
-                'schema': {
-                    'type': 'object',
-                    'properties': {
-                        'street': {
-                            'type': 'string',
-                            'description': 'Street name',
-                            'example': 'Chuprynky'
-                        },
-                        'building_number': {
-                            'type': 'string',
-                            'description': 'Building number',
-                            'example': '12'
-                        }
+    'parameters': [
+        {
+            'in': 'body',
+            'name': 'body',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'street': {
+                        'type': 'string',
+                        'example': 'Chuprynky'
                     },
-                    'required': ['street', 'building_number']
-                }
+                    'building_number': {
+                        'type': 'string',
+                        'example': '12'
+                    }
+                },
+                'required': ['street', 'building_number']
             }
         }
-    },
+    ],
     'responses': {
         201: {
-            'description': 'Address created successfully',
-            'content': {
-                'application/json': {
-                    'example': {
-                        'id': 1,
-                        'street': 'Chuprynky',
-                        'building_number': '12'
-                    }
-                }
-            }
+            'description': 'Address created successfully'
         }
     }
 })
