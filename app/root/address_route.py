@@ -96,48 +96,50 @@ def get_address(address_id: int) -> Response:
 @address_bp.route('/<int:address_id>', methods=['PUT'])
 @swag_from({
     'tags': ['Address'],
-    'summary': 'Partially update address by ID',
-    'description': 'Updates one or more fields of the address.',
+    'summary': 'Update entire address by ID',
+    'description': 'Replaces an existing address with a new one by its ID.',
     'parameters': [
         {
             'name': 'address_id',
             'in': 'path',
-            'schema': {'type': 'integer'},
+            'type': 'integer',
             'required': True,
-            'description': 'ID of the address to patch'
+            'description': 'ID of the address to update'
+        },
+        {
+            'in': 'body',
+            'name': 'body',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'street': {
+                        'type': 'string',
+                        'description': 'Street name',
+                        'example': 'New Street'
+                    },
+                    'building_number': {
+                        'type': 'string',
+                        'description': 'Building number',
+                        'example': '15'
+                    }
+                },
+                'required': ['street', 'building_number']
+            }
         }
     ],
-    'requestBody': {
-        'required': True,
-        'content': {
-            'application/json': {
-                'schema': {
-                    'type': 'object',
-                    'properties': {
-                        'street': {
-                            'type': 'string',
-                            'description': 'Street name',
-                            'example': 'Partial Update Street'
-                        },
-                        'building_number': {
-                            'type': 'string',
-                            'description': 'Building number',
-                            'example': '12'
-                        }
-                    }
-                }
-            }
-        }
-    },
     'responses': {
         200: {
-            'description': 'Address partially updated',
-            'content': {
+            'description': 'Address updated successfully',
+            'examples': {
                 'application/json': {
-                    'example': {"id": 1, "street": "Partial Update Street", "building_number": "12"}
+                    'id': 1,
+                    'street': 'New Street',
+                    'building_number': '15'
                 }
             }
-        }
+        },
+        404: {'description': 'Address not found'}
     }
 })
 def update_address(address_id: int) -> Response:
@@ -151,40 +153,49 @@ def update_address(address_id: int) -> Response:
 @swag_from({
     'tags': ['Address'],
     'summary': 'Partially update address by ID',
-    'description': 'Allows updating one or more address fields.',
+    'description': 'Updates one or more fields of an existing address.',
     'parameters': [
         {
             'name': 'address_id',
             'in': 'path',
-            'schema': {'type': 'integer'},
+            'type': 'integer',
             'required': True,
             'description': 'ID of the address to patch'
         },
         {
-            'name': 'street',
-            'in': 'query',
-            'type': 'string',
-            'required': False,
-            'description': 'Street name (optional)'
-        },
-        {
-            'name': 'building_number',
-            'in': 'query',
-            'type': 'string',
-            'required': False,
-            'description': 'Building number (optional)'
+            'in': 'body',
+            'name': 'body',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'street': {
+                        'type': 'string',
+                        'description': 'Street name (optional)',
+                        'example': 'Partial Update Street'
+                    },
+                    'building_number': {
+                        'type': 'string',
+                        'description': 'Building number (optional)',
+                        'example': '12'
+                    }
+                }
+            }
         }
     ],
     'responses': {
         200: {
             'description': 'Address partially updated',
-            'content': {
+            'examples': {
                 'application/json': {
-                    'example': {"id": 1, "street": "Partial Update Street", "building_number": "12"}
+                    'id': 1,
+                    'street': 'Partial Update Street',
+                    'building_number': '12'
                 }
             }
         },
-        400: {'description': 'No valid parameters provided'}
+        400: {'description': 'Invalid request or missing fields'},
+        404: {'description': 'Address not found'}
     }
 })
 def patch_address(address_id: int) -> Response:

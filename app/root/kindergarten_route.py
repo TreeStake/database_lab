@@ -2,15 +2,73 @@ from http import HTTPStatus
 from flask import Blueprint, jsonify, Response, request, make_response
 from ..controller import kindergarten_controller
 from ..domain.kindergarten import Kindergarten
+from flasgger import swag_from
+
 kindergarten_bp = Blueprint('kindergarten', __name__, url_prefix='/kindergarten')
 
 
 @kindergarten_bp.route('', methods=['GET'])
+@swag_from({
+    'tags': ['Kindergarten'],
+    'summary': 'Get all kindergartens',
+    'description': 'Returns a list of all kindergartens in the system.',
+    'responses': {
+        200: {
+            'description': 'List of kindergartens retrieved successfully',
+            'content': {
+                'application/json': {
+                    'example': [
+                        {
+                            "adress_id": 1,
+                            "number": "10100",
+                            "id": 1
+                        }
+                    ]
+                }
+            }
+        }
+    }
+})
 def get_all_kindergartens() -> Response:
     return make_response(jsonify(kindergarten_controller.find_all()), HTTPStatus.OK)
 
 
 @kindergarten_bp.route('', methods=['POST'])
+@swag_from({
+    'tags': ['Kindergarten'],
+    'summary': 'Create a new kindergarten',
+    'description': 'Creates a new kindergarten entry in the database.',
+    'requestBody': {
+        'required': True,
+        'content': {
+            'application/json': {
+                'schema': {
+                    'type': 'object',
+                    'properties': {
+                        "adress_id": {"type": "integer", "example": 1},
+                        "number": {"type": "string", "example": "10100"}
+                    },
+                    'required': ['adress_id', 'number']
+                }
+            }
+        }
+    },
+    'responses': {
+        201: {
+            'description': 'Kindergarten created successfully',
+            'content': {
+                'application/json': {
+                    'example': {
+                        "adress_id": 1,
+                        "number": "10100",
+                        "id": 1
+                    }
+                }
+            }
+        },
+        400: {'description': 'Invalid input data'}
+    }
+})
 def create_kindergarten() -> Response:
     content = request.get_json()
     kindergarten = Kindergarten.create_from_dto(content)
@@ -19,11 +77,61 @@ def create_kindergarten() -> Response:
 
 
 @kindergarten_bp.route('/<int:kindergarten_id>', methods=['GET'])
+@swag_from({
+    'tags': ['Kindergarten'],
+    'summary': 'Get kindergarten by ID',
+    'description': 'Returns a kindergarten record by its ID.',
+    'parameters': [
+        {'name': 'kindergarten_id', 'in': 'path', 'schema': {'type': 'integer'}, 'required': True}
+    ],
+    'responses': {
+        200: {
+            'description': 'Kindergarten retrieved successfully',
+            'content': {
+                'application/json': {
+                    'example': {
+                        "adress_id": 1,
+                        "number": "10100",
+                        "id": 1
+                    }
+                }
+            }
+        },
+        404: {'description': 'Kindergarten not found'}
+    }
+})
 def get_kindergarten(kindergarten_id: int) -> Response:
     return make_response(jsonify(kindergarten_controller.find_by_id(kindergarten_id)), HTTPStatus.OK)
 
 
 @kindergarten_bp.route('/<int:kindergarten_id>', methods=['PUT'])
+@swag_from({
+    'tags': ['Kindergarten'],
+    'summary': 'Update kindergarten by ID',
+    'description': 'Updates all fields of a kindergarten record by its ID.',
+    'parameters': [
+        {'name': 'kindergarten_id', 'in': 'path', 'schema': {'type': 'integer'}, 'required': True}
+    ],
+    'requestBody': {
+        'required': True,
+        'content': {
+            'application/json': {
+                'schema': {
+                    'type': 'object',
+                    'properties': {
+                        "adress_id": {"type": "integer", "example": 1},
+                        "number": {"type": "string", "example": "10100"}
+                    },
+                    'required': ['adress_id', 'number']
+                }
+            }
+        }
+    },
+    'responses': {
+        200: {'description': 'Kindergarten updated successfully'},
+        400: {'description': 'Invalid input data'}
+    }
+})
 def update_kindergarten(kindergarten_id: int) -> Response:
     content = request.get_json()
     kindergarten = Kindergarten.create_from_dto(content)
@@ -32,6 +140,32 @@ def update_kindergarten(kindergarten_id: int) -> Response:
 
 
 @kindergarten_bp.route('/<int:kindergarten_id>', methods=['PATCH'])
+@swag_from({
+    'tags': ['Kindergarten'],
+    'summary': 'Partially update kindergarten by ID',
+    'description': 'Updates one or more fields of a kindergarten record by its ID.',
+    'parameters': [
+        {'name': 'kindergarten_id', 'in': 'path', 'schema': {'type': 'integer'}, 'required': True}
+    ],
+    'requestBody': {
+        'required': True,
+        'content': {
+            'application/json': {
+                'schema': {
+                    'type': 'object',
+                    'properties': {
+                        "adress_id": {"type": "integer", "example": 2},
+                        "number": {"type": "string", "example": "20200"}
+                    }
+                }
+            }
+        }
+    },
+    'responses': {
+        200: {'description': 'Kindergarten partially updated successfully'},
+        400: {'description': 'Invalid input data'}
+    }
+})
 def patch_kindergarten(kindergarten_id: int) -> Response:
     content = request.get_json()
     kindergarten_controller.patch(kindergarten_id, content)
@@ -39,6 +173,18 @@ def patch_kindergarten(kindergarten_id: int) -> Response:
 
 
 @kindergarten_bp.route('/<int:kindergarten_id>', methods=['DELETE'])
+@swag_from({
+    'tags': ['Kindergarten'],
+    'summary': 'Delete kindergarten by ID',
+    'description': 'Deletes a kindergarten record by its ID.',
+    'parameters': [
+        {'name': 'kindergarten_id', 'in': 'path', 'schema': {'type': 'integer'}, 'required': True}
+    ],
+    'responses': {
+        200: {'description': 'Kindergarten deleted successfully'},
+        404: {'description': 'Kindergarten not found'}
+    }
+})
 def delete_kindergarten(kindergarten_id: int) -> Response:
     kindergarten_controller.delete(kindergarten_id)
     return make_response("kindergarten deleted", HTTPStatus.OK)

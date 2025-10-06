@@ -2,16 +2,65 @@ from http import HTTPStatus
 from flask import Blueprint, jsonify, Response, request, make_response
 from ..controller import educator_has_awards_controller
 from ..domain.educator_has_awards import EducatorHasAwards
+from flasgger import swag_from
 
 educator_has_awards_bp = Blueprint('educator_has_awards', __name__, url_prefix='/educator_has_awards')
 
 
 @educator_has_awards_bp.route('', methods=['GET'])
+@swag_from({
+    'tags': ['Educator-Has-Award'],
+    'summary': 'Get all educator awards',
+    'description': 'Returns a list of all educator-award relations in the system.',
+    'responses': {
+        200: {
+            'description': 'List of educator-award relations retrieved successfully',
+            'content': {
+                'application/json': {
+                    'example': [
+                        {"awards_id": 1, "educators_id": 1}
+                    ]
+                }
+            }
+        }
+    }
+})
 def get_all_educator_awards() -> Response:
     return make_response(jsonify(educator_has_awards_controller.find_all()), HTTPStatus.OK)
 
 
 @educator_has_awards_bp.route('', methods=['POST'])
+@swag_from({
+    'tags': ['Educator-Has-Award'],
+    'summary': 'Create a new educator-award relation',
+    'description': 'Creates a new relation between an educator and an award.',
+    'requestBody': {
+        'required': True,
+        'content': {
+            'application/json': {
+                'schema': {
+                    'type': 'object',
+                    'properties': {
+                        'awards_id': {'type': 'integer', 'example': 1},
+                        'educators_id': {'type': 'integer', 'example': 1}
+                    },
+                    'required': ['awards_id', 'educators_id']
+                }
+            }
+        }
+    },
+    'responses': {
+        201: {
+            'description': 'Educator-award relation created successfully',
+            'content': {
+                'application/json': {
+                    'example': {"awards_id": 1, "educators_id": 1}
+                }
+            }
+        },
+        400: {'description': 'Invalid input data'}
+    }
+})
 def create_educator_award() -> Response:
     content = request.get_json()
     educator_has_award = EducatorHasAwards.create_from_dto(content)
