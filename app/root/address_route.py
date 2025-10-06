@@ -30,30 +30,37 @@ def get_all_addresses() -> Response:
 @swag_from({
     'tags': ['Address'],
     'summary': 'Create new address',
-    'requestBody': {
-        'required': True,
-        'content': {
-            'application/json': {
-                'schema': {
-                    'type': 'object',
-                    'properties': {
-                        'street': {'type': 'string', 'description': 'Street name'},
-                        'building_number': {'type': 'string', 'description': 'Building number'}
-                    },
-                    'required': ['street', 'building_number']
-                }
-            }
+    'description': 'Creates a new address entry. Fill in the parameters below to add an address.',
+    'parameters': [
+        {
+            'name': 'street',
+            'in': 'query',
+            'type': 'string',
+            'required': True,
+            'description': 'Street name (e.g. Chuprynky)'
+        },
+        {
+            'name': 'building_number',
+            'in': 'query',
+            'type': 'string',
+            'required': True,
+            'description': 'Building number (e.g. 12)'
         }
-    },
+    ],
     'responses': {
         201: {
-            'description': 'Address created',
+            'description': 'Address successfully created',
             'content': {
                 'application/json': {
-                    'example': {"id": 1, "street": "Chuprynky", "building_number": "12"}
+                    'example': {
+                        "id": 1,
+                        "street": "Chuprynky",
+                        "building_number": "12"
+                    }
                 }
             }
-        }
+        },
+        400: {'description': 'Invalid input data'}
     }
 })
 def create_address() -> Response:
@@ -95,6 +102,7 @@ def get_address(address_id: int) -> Response:
 @swag_from({
     'tags': ['Address'],
     'summary': 'Update entire address by ID',
+    'description': 'Replaces all address fields with new values.',
     'parameters': [
         {
             'name': 'address_id',
@@ -102,32 +110,32 @@ def get_address(address_id: int) -> Response:
             'schema': {'type': 'integer'},
             'required': True,
             'description': 'ID of the address to update'
+        },
+        {
+            'name': 'street',
+            'in': 'query',
+            'type': 'string',
+            'required': True,
+            'description': 'New street name'
+        },
+        {
+            'name': 'building_number',
+            'in': 'query',
+            'type': 'string',
+            'required': True,
+            'description': 'New building number'
         }
     ],
-    'requestBody': {
-        'required': True,
-        'content': {
-            'application/json': {
-                'schema': {
-                    'type': 'object',
-                    'properties': {
-                        'street': {'type': 'string', 'description': 'Street name'},
-                        'building_number': {'type': 'string', 'description': 'Building number'}
-                    },
-                    'required': ['street', 'building_number']
-                }
-            }
-        }
-    },
     'responses': {
         200: {
-            'description': 'Address updated',
+            'description': 'Address successfully updated',
             'content': {
                 'application/json': {
                     'example': {"id": 1, "street": "New Street", "building_number": "15"}
                 }
             }
-        }
+        },
+        400: {'description': 'Invalid or missing parameters'}
     }
 })
 def update_address(address_id: int) -> Response:
@@ -141,6 +149,7 @@ def update_address(address_id: int) -> Response:
 @swag_from({
     'tags': ['Address'],
     'summary': 'Partially update address by ID',
+    'description': 'Allows updating one or more address fields.',
     'parameters': [
         {
             'name': 'address_id',
@@ -148,22 +157,22 @@ def update_address(address_id: int) -> Response:
             'schema': {'type': 'integer'},
             'required': True,
             'description': 'ID of the address to patch'
+        },
+        {
+            'name': 'street',
+            'in': 'query',
+            'type': 'string',
+            'required': False,
+            'description': 'Street name (optional)'
+        },
+        {
+            'name': 'building_number',
+            'in': 'query',
+            'type': 'string',
+            'required': False,
+            'description': 'Building number (optional)'
         }
     ],
-    'requestBody': {
-        'required': True,
-        'content': {
-            'application/json': {
-                'schema': {
-                    'type': 'object',
-                    'properties': {
-                        'street': {'type': 'string', 'description': 'Street name'},
-                        'building_number': {'type': 'string', 'description': 'Building number'}
-                    }
-                }
-            }
-        }
-    },
     'responses': {
         200: {
             'description': 'Address partially updated',
@@ -172,7 +181,8 @@ def update_address(address_id: int) -> Response:
                     'example': {"id": 1, "street": "Partial Update Street", "building_number": "12"}
                 }
             }
-        }
+        },
+        400: {'description': 'No valid parameters provided'}
     }
 })
 def patch_address(address_id: int) -> Response:
