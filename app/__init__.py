@@ -19,11 +19,14 @@ DB_NAME = os.getenv("DB_NAME")
 
 def create_app():
     app = Flask(__name__)
+    swagger_config = {
+        "openapi": "3.0.2"
+    }
     app.config.from_object(Config)
     db.init_app(app)
     register_routes(app)
 
-    swagger = Swagger(app)
+    swagger = Swagger(app, config=swagger_config)
 
     create_database()
     create_tables(app)
