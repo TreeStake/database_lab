@@ -28,3 +28,7 @@ def register_routes(app: Flask) -> None:
     app.register_blueprint(kindergarten_bp)
     app.register_blueprint(salary_bp)
     app.register_blueprint(toy_bp)
+
+    @app.route('/')
+    def index():
+        return "Backend is running!", 200
